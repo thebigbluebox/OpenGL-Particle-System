@@ -7,7 +7,7 @@
 particleWorld render;
 struct Setting
 {
-	//bool pause = true;	//boolean to pause whats currently being displayed
+	bool pause = true;	//boolean to pause whats currently being displayed
 	double speedFactor = 1; //speed of the polygon
 	int mode = 1;	//display mode in 1 2 or 3 defined by keyboard shortcuts to switch
 
@@ -20,50 +20,53 @@ struct Setting
 	double green = 1;
 	double blue = 1;
 } set;
-GLdouble pos[3] = { 0, 1, 0 };
-GLdouble rot[3] = { 0, 1, 0 };
+
 GLdouble camPos[3] = { 0, 5, 10 };
 GLdouble const origin[3] = { 0, 0, 0 };
-int a = 0;
 
 void keyboard(unsigned char key, int x, int y)
 {
-
-	/* key presses move the cube, if it isn't at the extents (hard-coded here) */
+		array<GLdouble,3> point = render.getLocation();
 	switch (key)
 	{
 	case 'q':
 	case 27:
 		exit(0);
 		break;
-
-	case 'a':
-	case 'A':
-		if (pos[0] > -4.4)
-			pos[0] -= 0.1;
-		rot[1] = -90;
+	case 'p':
+	case 'P':
+		if (set.pause){
+			set.pause = FALSE;
+		}
+		else{
+			set.pause = TRUE;
+		}
 		break;
-
 	case 'w':
 	case 'W':
-		if (pos[2] > -4.4)
-			pos[2] -= 0.1;
-		rot[1] = 180;
+		point[2] += 1;
+		render.setLocation(point);
+		break;	
+	case 'a':
+	case 'A':
+		point[0] -= 1;
+		render.setLocation(point);
 		break;
-
-	case 'd':
-	case 'D':
-		if (pos[0] < 4.4)
-			pos[0] += 0.1;
-		rot[1] = 90;
-		break;
-
 	case 's':
 	case 'S':
-		if (pos[2] < 4.4)
-			pos[2] += 0.1;
-		rot[1] = 0;
-		break;	
+		point[2] -= 1;
+		render.setLocation(point);
+		break;
+	case 'd':
+	case 'D':
+		
+		point[0] += 1;
+		render.setLocation(point);
+		break;
+	case 'r':
+	case 'R':
+		render.addRandom();
+		break;
 	}
 
 	glutPostRedisplay();
@@ -114,13 +117,12 @@ void init(void)
 
 void timer(int value)
 {
-	/*if (set.pause == false)
-	{
+	if(set.pause){
+		render.updateAll();
 		
-	}*/
-	a += 1;
-	glutTimerFunc(8, timer, 0);
+	}
 	glutPostRedisplay();
+	glutTimerFunc(8, timer, 0);
 }
 
 
@@ -129,23 +131,14 @@ void timer(int value)
 */
 void display(void)
 {
-	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 	glColor3f(1, 1, 1);
-
-	glPushMatrix();
-	glTranslated(pos[0], pos[1], pos[2]);
-	glRotated(a, 0, 1, 0 );
-	glutSolidCube(1);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslated(10, 0, 0);
-	render.drawAll();
-	glPopMatrix();
+	
+	render.drawAll();		//draws all particles in the particle queue
 	genplatformClass::draw();
 	glutSwapBuffers();
 }
@@ -153,27 +146,23 @@ void display(void)
 /* main function - program entry point */
 int main(int argc, char** argv)
 {
-	array<GLdouble, 3> coord = { 5, 1, 2 };
-	array<GLdouble, 4> color = { 1, 0, 0.5, 1 };
-	array<GLdouble, 3> direction = { 1, 1, 1 };
-	array<GLdouble, 3> normal = { 1, 1, 1 };
-	render.insertShape(coord, color, direction, normal, 3);
+	for (int i = 0; i < 40; i++){
+		render.addRandom();
+	}
 	srand(time(NULL));
 	glutInit(&argc, argv);		//starts up GLUT
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-
-
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 100);
-
 	glutCreateWindow("Assignment 2");	//creates the window
-
+	
 	glutDisplayFunc(display);	//registers "display" as the display callback function
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
 	glutTimerFunc(8, timer, 0);	//timer function for the program
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	init();
 
 	glutMainLoop();				//starts the event loop

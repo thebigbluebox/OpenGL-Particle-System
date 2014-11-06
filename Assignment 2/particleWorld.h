@@ -9,7 +9,7 @@ private:
 public:
 	particleWorld(void){}
 
-	void insertShape(array<GLdouble, 3> coord,
+	void insertShape(
 		array<GLdouble,4> color,
 		array<GLdouble,3> direction,
 		array<GLdouble,3> normal,
@@ -17,13 +17,24 @@ public:
 
 	void setLocation(array<GLdouble, 3> coord);
 
-	void drawAll();
+	array<GLdouble, 3> getLocation(void);
 
-	void updateAll();
+	void setPlane(array<GLdouble, 3> a,
+		array<GLdouble, 3> b,
+		array<GLdouble, 3> c,
+		array<GLdouble, 3> d);
+	
+	void setTime(int timeval);	//sets the default time for erasing the particles
+
+	void drawAll();		//draws all of the render queue
+
+	void updateAll();	//updates the render queue with appropriate properties
+
+	void deleteParticle(shapeObj ref);
+	
+	void addShape(int shapeType);	//adds only of a specified shape type
 
 	void addRandom();
 
 	void reset();
-
-	void create(int shapeType);
 };
