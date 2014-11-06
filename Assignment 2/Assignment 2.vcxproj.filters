@@ -18,9 +18,6 @@
     <ClCompile Include="boilerplateClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="renderqueueClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="genplatformClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -30,12 +27,12 @@
     <ClCompile Include="themain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="particleWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boilerplateClass.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="renderqueueClass.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="genplatformClass.h">
@@ -47,13 +44,13 @@
     <ClInclude Include="basicphysics.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="linkedlistClass.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="shapeObj.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="glutHeader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particleWorld.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

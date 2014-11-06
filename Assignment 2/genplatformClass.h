@@ -9,5 +9,5 @@ class genplatformClass{
 public:
 	genplatformClass(void){}
 
-	void draw(void);
+	void static draw(void);
 };

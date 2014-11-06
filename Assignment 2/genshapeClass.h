@@ -1,7 +1,4 @@
-#ifndef platform
-#define platform
 using namespace std;
-#endif
 
 class genshapeClass{
 

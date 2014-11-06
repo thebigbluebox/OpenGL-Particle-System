@@ -65,9 +65,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="boilerplateClass.cpp" />
+    <ClCompile Include="particleWorld.cpp" />
     <ClCompile Include="themain.cpp" />
     <ClCompile Include="genshapeClass.cpp" />
-    <ClCompile Include="renderqueueClass.cpp" />
     <ClCompile Include="genplatformClass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -76,8 +76,7 @@
     <ClInclude Include="genplatformClass.h" />
     <ClInclude Include="genshapeClass.h" />
     <ClInclude Include="glutHeader.h" />
-    <ClInclude Include="linkedlistClass.h" />
-    <ClInclude Include="renderqueueClass.h" />
+    <ClInclude Include="particleWorld.h" />
     <ClInclude Include="shapeObj.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

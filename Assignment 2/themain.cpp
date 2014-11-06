@@ -1,28 +1,30 @@
 #include "glutHeader.h"
-#include "renderqueueClass.h"
+#include "particleWorld.h"
 #include "genplatformClass.h"
 #include <stdio.h>
 #include <time.h>
 
-renderqueueClass render;
+particleWorld render;
 struct Setting
 {
-	bool pause = true;	//boolean to pause whats currently being displayed
+	//bool pause = true;	//boolean to pause whats currently being displayed
 	double speedFactor = 1; //speed of the polygon
 	int mode = 1;	//display mode in 1 2 or 3 defined by keyboard shortcuts to switch
 
 	int windowSizeX = 600; //window size X
 	int windowSizeY = 600; //window size Y
-	float ptsize = 3;	//point size
+	GLdouble ptsize = 3;	//point size
 
 	bool colormode = false;	//use mouse menu color mode or randomly given
 	double red = 1;		//global colors
 	double green = 1;
 	double blue = 1;
 } set;
-float pos[3] = { 0, 1, 0 };
-float rot[3] = { 0, 1, 0 };
-float camPos[3] = { 0, 5, 10 };
+GLdouble pos[3] = { 0, 1, 0 };
+GLdouble rot[3] = { 0, 1, 0 };
+GLdouble camPos[3] = { 0, 5, 10 };
+GLdouble const origin[3] = { 0, 0, 0 };
+int a = 0;
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -112,10 +114,11 @@ void init(void)
 
 void timer(int value)
 {
-	if (set.pause == false)
+	/*if (set.pause == false)
 	{
 		
-	}
+	}*/
+	a += 1;
 	glutTimerFunc(8, timer, 0);
 	glutPostRedisplay();
 }
@@ -126,24 +129,35 @@ void timer(int value)
 */
 void display(void)
 {
-	float origin[3] = { 0, 0, 0 };
-	float origin2[3] = { 1, 2, 3 };
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	gluLookAt(camPos[0], camPos[1], camPos[2], 0, 0, 0, 0, 1, 0);
 	glColor3f(1, 1, 1);
-	
-	genplatformClass stuff;
-	stuff.draw();
-	
+
+	glPushMatrix();
+	glTranslated(pos[0], pos[1], pos[2]);
+	glRotated(a, 0, 1, 0 );
+	glutSolidCube(1);
+	glPopMatrix();
+	glPushMatrix();
+	glTranslated(10, 0, 0);
+	render.drawAll();
+	glPopMatrix();
+	genplatformClass::draw();
 	glutSwapBuffers();
 }
 
 /* main function - program entry point */
 int main(int argc, char** argv)
 {
+	array<GLdouble, 3> coord = { 5, 1, 2 };
+	array<GLdouble, 4> color = { 1, 0, 0.5, 1 };
+	array<GLdouble, 3> direction = { 1, 1, 1 };
+	array<GLdouble, 3> normal = { 1, 1, 1 };
+	render.insertShape(coord, color, direction, normal, 3);
 	srand(time(NULL));
 	glutInit(&argc, argv);		//starts up GLUT
 
@@ -158,7 +172,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);	//registers "display" as the display callback function
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
-	glutTimerFunc(8, timer, 0);
+	glutTimerFunc(8, timer, 0);	//timer function for the program
 	glEnable(GL_DEPTH_TEST);
 	init();
 
