@@ -1,40 +1,70 @@
-#include <array>
 #include <list>
 #include "shapeObj.h"
 using namespace std;
-
+/*This class is where all particles are stored, created, updated,
+and deleted. It holds all functionalities that dictate the special
+functions to the regular behaviour of particles.
+*/
 class particleWorld{
 private:
 	list<shapeObj> theQueue;
 public:
 	particleWorld(void){}
+	int currentshape = 1;
+	bool friction = false;
+	bool snow = false;
+	bool cannon = false;
+	bool wind = false;
+	GLdouble size = 1;
+	GLdouble speed = 1;
+	GLdouble gravity = 0.5;
+
 
 	void insertShape(
-		array<GLdouble,4> color,
-		array<GLdouble,3> direction,
-		array<GLdouble,3> normal,
+		GLdouble color1,
+		GLdouble color2,
+		GLdouble color3,
+		GLdouble directionx,
+		GLdouble directiony,
+		GLdouble directionz,
+		GLdouble normalx,
+		GLdouble normaly,
+		GLdouble normalz,
 		int shapeType);
 
-	void setLocation(array<GLdouble, 3> coord);
+	void setLocation(GLdouble x , GLdouble y, GLdouble z);
 
-	array<GLdouble, 3> getLocation(void);
+	GLdouble getLocationx(void);
+	GLdouble getLocationy(void);
+	GLdouble getLocationz(void);
 
-	void setPlane(array<GLdouble, 3> a,
-		array<GLdouble, 3> b,
-		array<GLdouble, 3> c,
-		array<GLdouble, 3> d);
+	void setPlane(GLdouble a, GLdouble b, GLdouble j, GLdouble w, GLdouble h, GLdouble d);
 	
 	void setTime(int timeval);	//sets the default time for erasing the particles
 
-	void drawAll();		//draws all of the render queue
+	void drawAll(void);		//draws all of the render queue
 
-	void updateAll();	//updates the render queue with appropriate properties
+	void updateAll(void);	//updates the render queue with appropriate properties
 
-	void deleteParticle(shapeObj ref);
+	void setShape(int shape);
 	
 	void addShape(int shapeType);	//adds only of a specified shape type
 
-	void addRandom();
+	void addRandom(void);	//adds 1 random particle to the list
 
-	void reset();
+	void reset(void);	//clears and empties the list
+
+	void decreaseSize(void);	//decreases the size drawn of the particles
+	
+	void increaseSize(void);	//decreases the size drawn of the particles
+
+	void increaseSpeed(void);	//increases the size drawn of the particles
+
+	void decreaseSpeed(void); 	//decreases the size drawn of the particles
+
+	void frictionMode(void);	//toggles between the friction mode
+
+	void snowMode(void);		//toggles between the snow mode
+
+	void windMode(void);		//toggles between the wind mode
 };

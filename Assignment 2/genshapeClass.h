@@ -1,5 +1,5 @@
 using namespace std;
-
+//this class defines the functions needed to create the platform of particle world
 class genshapeClass{
 
 public:

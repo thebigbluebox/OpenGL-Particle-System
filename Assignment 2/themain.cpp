@@ -5,28 +5,13 @@
 #include <time.h>
 
 particleWorld render;
-struct Setting
-{
-	bool pause = true;	//boolean to pause whats currently being displayed
-	double speedFactor = 1; //speed of the polygon
-	int mode = 1;	//display mode in 1 2 or 3 defined by keyboard shortcuts to switch
-
-	int windowSizeX = 600; //window size X
-	int windowSizeY = 600; //window size Y
-	GLdouble ptsize = 3;	//point size
-
-	bool colormode = false;	//use mouse menu color mode or randomly given
-	double red = 1;		//global colors
-	double green = 1;
-	double blue = 1;
-} set;
-
+bool pause = true;	//boolean to pause whats currently being displayed
 GLdouble camPos[3] = { 0, 5, 10 };
-GLdouble const origin[3] = { 0, 0, 0 };
+GLdouble origin[3] = { 0, 0, 0 };
 
 void keyboard(unsigned char key, int x, int y)
 {
-		array<GLdouble,3> point = render.getLocation();
+	GLdouble point[3] = { render.getLocationx(), render.getLocationy(), render.getLocationz() };
 	switch (key)
 	{
 	case 'q':
@@ -35,37 +20,74 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'p':
 	case 'P':
-		if (set.pause){
-			set.pause = FALSE;
+		if (pause){
+			pause = false;
 		}
 		else{
-			set.pause = TRUE;
+			pause = true;
 		}
 		break;
 	case 'w':
 	case 'W':
 		point[2] += 1;
-		render.setLocation(point);
+		render.setLocation(point[0],point[1],point[2]);
 		break;	
 	case 'a':
 	case 'A':
 		point[0] -= 1;
-		render.setLocation(point);
+		render.setLocation(point[0], point[1], point[2]);
 		break;
 	case 's':
 	case 'S':
 		point[2] -= 1;
-		render.setLocation(point);
+		render.setLocation(point[0], point[1], point[2]);
 		break;
 	case 'd':
 	case 'D':
 		
 		point[0] += 1;
-		render.setLocation(point);
+		render.setLocation(point[0], point[1], point[2]);
 		break;
-	case 'r':
-	case 'R':
-		render.addRandom();
+	case 'f':
+	case 'F':
+		render.frictionMode();
+		break;
+	case '=':
+	case '+':
+		render.increaseSize();
+		break;
+	case '-':
+	case '_':
+		render.decreaseSize();
+		break;
+	case '{':
+	case '[':
+		render.increaseSpeed();
+		break;
+	case '}':
+	case ']':
+		render.decreaseSpeed();
+		break;
+	case ' ':
+		render.reset();
+		break;
+	case '1':
+		render.setShape(1);
+		break;
+	case '2':
+		render.setShape(2);
+		break;
+	case '3':
+		render.setShape(3);
+		break;
+	case '4':
+		render.setShape(4);
+		break;
+	case '5':
+		render.snowMode();
+		break;
+	case '6':
+		render.windMode();
 		break;
 	}
 
@@ -117,12 +139,12 @@ void init(void)
 
 void timer(int value)
 {
-	if(set.pause){
+	if(pause){
+		render.addRandom();
 		render.updateAll();
-		
 	}
 	glutPostRedisplay();
-	glutTimerFunc(8, timer, 0);
+	glutTimerFunc(30, timer, 0);
 }
 
 
@@ -142,16 +164,44 @@ void display(void)
 	genplatformClass::draw();
 	glutSwapBuffers();
 }
-
+void printhelp(void)
+{
+	printf("Key | Function\n");
+	printf("== == == == == == == == == =\n");
+	printf("1 | Mode 1 Cubes\n");
+	printf("2 | Mode 2 Spheres\n");
+	printf("3 | Mode 3 Teapots\n");
+	printf("4 | Mode 4 Torus\n");
+	printf("5 | Toggle Snow Mode\n");
+	printf("6 | Toggle Wind Mode\n");
+	printf("- | Decrease size\n");
+	printf("+ | Increase size\n");
+	printf("[ | Decrease gravity\n");
+	printf("] | Increase gravity\n");
+	printf("q | Exit\n");
+	printf("w | Moves Particle Gen up\n");
+	printf("a | Moves Particle Gen left\n");
+	printf("s | Moves Particle Gen down\n");
+	printf("d | Moves Particle Gen right\n");
+	printf("up | Moves camera up\n");
+	printf("down | Moves camera left\n");
+	printf("left | Moves camera down\n");
+	printf("right | Moves camera right\n");
+	printf("home | Moves camera height up\n");
+	printf("end | Moves camera height down\n");
+	printf("r | Reset / Clear\n");
+	printf("SPACE | Clears Queue\n");
+}
 /* main function - program entry point */
 int main(int argc, char** argv)
 {
+	printhelp();
+	srand(time(NULL));
 	for (int i = 0; i < 40; i++){
 		render.addRandom();
 	}
-	srand(time(NULL));
+	
 	glutInit(&argc, argv);		//starts up GLUT
-
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 100);
