@@ -1,6 +1,11 @@
 OpenGL-Particle-System
 ======================
 An particle system implemented in OpenGL that implements features such as snow and wind, along with collision detection with a surface.
+
+
+![Screen Shot](/Particles.png "A screenshot of the running particle simulator")
+
+
 Controls
 ---------
 + Right Arrow : Move camera x axis towards positive infinity
